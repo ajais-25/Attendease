@@ -19,7 +19,7 @@ const userSchema = new Schema(
         role: {
             type: String,
             required: true,
-            enum: ["student", "teacher", "admin"],
+            enum: ["student", "teacher", "hod"],
         },
         branch: [
             // 1 for student, many for teacher
