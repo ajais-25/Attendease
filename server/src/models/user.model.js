@@ -19,7 +19,7 @@ const userSchema = new Schema(
         role: {
             type: String,
             required: true,
-            enum: ["student", "teacher", "hod"],
+            enum: ["student", "teacher"],
         },
         branch: [
             // 1 for student, many for teacher
@@ -54,6 +54,9 @@ const userSchema = new Schema(
         isVerified: {
             type: Boolean,
             default: false,
+        },
+        refreshToken: {
+            type: String,
         },
     },
     { timestamps: true }

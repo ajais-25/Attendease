@@ -7,7 +7,8 @@ const branchSchema = new Schema(
             required: true,
         },
         hod: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: "Admin",
             required: true,
         },
     },
