@@ -19,6 +19,12 @@ const subjectSchema = new Schema(
             type: Number,
             required: true,
         },
+        assignedTo: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
     },
     { timestamps: true }
 );
