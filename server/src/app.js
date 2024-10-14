@@ -20,10 +20,12 @@ app.use(cookieParser());
 import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import branchRoutes from "./routes/branch.routes.js";
+import sectionRoutes from "./routes/section.routes.js";
 
 // routes implementation
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/branch", branchRoutes);
+app.use("/api/v1/section", sectionRoutes);
 
 export { app };

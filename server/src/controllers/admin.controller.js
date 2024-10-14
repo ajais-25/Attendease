@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Admin } from "../models/admin.model.js";
 import jwt from "jsonwebtoken";
 import { Token } from "../models/token.model.js";
+import { isAdmin, isHod } from "../utils/checkRole.js";
 import { nodemailerTransport as sendEmail } from "../utils/Nodemailer.js";
 
 const generateAccessAndRefreshTokens = async (adminId) => {
@@ -21,20 +22,6 @@ const generateAccessAndRefreshTokens = async (adminId) => {
                 "Something went wrong while genrating refresh and access token",
         });
     }
-};
-
-const isAdmin = (admin) => {
-    if (admin.role === "admin") {
-        return true;
-    }
-    return false;
-};
-
-const isHod = (admin) => {
-    if (admin.role === "hod") {
-        return true;
-    }
-    return false;
 };
 
 // normal

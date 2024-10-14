@@ -2,13 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Admin } from "../models/admin.model.js";
 import { Branch } from "../models/branch.model.js";
-
-const isAdmin = (admin) => {
-    if (admin.role === "admin") {
-        return true;
-    }
-    return false;
-};
+import { isAdmin } from "../utils/checkRole.js";
 
 const createBranch = asyncHandler(async (req, res) => {
     if (!isAdmin(req.admin)) {
