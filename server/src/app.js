@@ -21,11 +21,13 @@ import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import branchRoutes from "./routes/branch.routes.js";
 import sectionRoutes from "./routes/section.routes.js";
+import subjectRoutes from "./routes/subject.routes.js";
 
 // routes implementation
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/branch", branchRoutes);
 app.use("/api/v1/section", sectionRoutes);
+app.use("/api/v1/subject", subjectRoutes);
 
 export { app };
