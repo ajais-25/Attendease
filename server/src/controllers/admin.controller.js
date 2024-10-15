@@ -300,6 +300,23 @@ const registerHod = asyncHandler(async (req, res) => {
         .json(new ApiResponse(201, createdAdmin, "Hod created successfully"));
 });
 
+const getHods = asyncHandler(async (req, res) => {
+    if (!isAdmin(req.admin)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const hods = await Admin.find({ role: "hod" }).select(
+        "-password -refreshToken"
+    );
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, hods, "Hods fetched successfully"));
+});
+
+// get details of Hod along with teachers in the branch
+const getHod = asyncHandler(async (req, res) => {});
+
 export {
     registerAdmin,
     login,

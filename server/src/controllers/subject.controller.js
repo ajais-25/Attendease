@@ -6,7 +6,7 @@ import { isHod } from "../utils/checkRole.js";
 import { Branch } from "../models/branch.model.js";
 
 const createSubject = asyncHandler(async (req, res) => {
-    if (isHod(req.admin)) {
+    if (!isHod(req.admin)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
@@ -46,7 +46,7 @@ const createSubject = asyncHandler(async (req, res) => {
 });
 
 const deleteSubject = asyncHandler(async (req, res) => {
-    if (isHod(req.admin)) {
+    if (!isHod(req.admin)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
@@ -64,7 +64,7 @@ const deleteSubject = asyncHandler(async (req, res) => {
 });
 
 const getSubjects = asyncHandler(async (req, res) => {
-    if (isHod(req.admin)) {
+    if (!isHod(req.admin)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
@@ -94,7 +94,7 @@ const getSubjects = asyncHandler(async (req, res) => {
 });
 
 const assignTeacher = asyncHandler(async (req, res) => {
-    if (!isHod(req.admin)) {
+    if (!!isHod(req.admin)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 

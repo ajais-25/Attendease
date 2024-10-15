@@ -5,7 +5,7 @@ import { Branch } from "../models/branch.model.js";
 import { isHod } from "../utils/checkRole.js";
 
 const createSection = asyncHandler(async (req, res) => {
-    if (isHod(req.admin)) {
+    if (!isHod(req.admin)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
@@ -39,7 +39,7 @@ const createSection = asyncHandler(async (req, res) => {
 });
 
 const getSections = asyncHandler(async (req, res) => {
-    if (isHod(req.admin)) {
+    if (!isHod(req.admin)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
@@ -57,7 +57,7 @@ const getSections = asyncHandler(async (req, res) => {
 });
 
 const deleteSection = asyncHandler(async (req, res) => {
-    if (isHod(req.admin)) {
+    if (!isHod(req.admin)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
