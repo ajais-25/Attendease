@@ -34,18 +34,10 @@ const attendanceSchema = new Schema(
             type: Boolean,
             default: false,
         },
-        students: [
+        studentsPresent: [
             {
-                student: {
-                    type: Schema.Types.ObjectId,
-                    ref: "User",
-                    required: true,
-                },
-                status: {
-                    type: String,
-                    required: true,
-                    enum: ["present", "absent"],
-                },
+                type: Schema.Types.ObjectId,
+                ref: "User",
             },
         ],
     },
