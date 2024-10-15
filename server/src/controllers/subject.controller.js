@@ -2,7 +2,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Subject } from "../models/subject.model.js";
 import { User } from "../models/user.model.js";
-import { isHod } from "../utils/checkRole.js";
+import { isHod, isTeacher } from "../utils/checkRole.js";
 import { Branch } from "../models/branch.model.js";
 
 const createSubject = asyncHandler(async (req, res) => {
@@ -129,4 +129,29 @@ const assignTeacher = asyncHandler(async (req, res) => {
     });
 });
 
-export { createSubject, deleteSubject, getSubjects, assignTeacher };
+const getTeacherSubjects = asyncHandler(async (req, res) => {
+    if (!isTeacher(req.teacher)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const subjects = await Subject.find({
+        semester,
+        assignedTo: req.teacher._id,
+    });
+
+    if (!subjects) {
+        return res.status(404).json({ message: "Subjects not found" });
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, subjects, "Subjects fetched successfully"));
+});
+
+export {
+    createSubject,
+    deleteSubject,
+    getSubjects,
+    assignTeacher,
+    getTeacherSubjects,
+};

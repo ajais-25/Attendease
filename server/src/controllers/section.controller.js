@@ -2,7 +2,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Section } from "../models/section.model.js";
 import { Branch } from "../models/branch.model.js";
-import { isHod } from "../utils/checkRole.js";
+import { Subject } from "../models/subject.model.js";
+import { isHod, isTeacher } from "../utils/checkRole.js";
 
 const createSection = asyncHandler(async (req, res) => {
     if (!isHod(req.admin)) {
@@ -74,4 +75,26 @@ const deleteSection = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, {}, "Section deleted successfully"));
 });
 
-export { createSection, getSections, deleteSection };
+const getTeacherSections = asyncHandler(async (req, res) => {
+    if (!isTeacher(req.admin)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const sections = await Subject.aggregate([
+        {
+            $group: {
+                _id: "$section",
+            },
+        },
+    ]);
+
+    if (!sections) {
+        return res.status(404).json({ message: "Sections not found" });
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, sections, "Sections fetched successfully"));
+});
+
+export { createSection, getSections, deleteSection, getTeacherSections };
