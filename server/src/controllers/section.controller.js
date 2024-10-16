@@ -10,11 +10,13 @@ const createSection = asyncHandler(async (req, res) => {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
-    const { branch, year, section } = req.body;
+    const { year, section } = req.body;
 
-    if (!branch || !year || !section) {
+    if (!year || !section) {
         return res.status(400).json({ message: "All fields are required" });
     }
+
+    const branch = await Branch.findOne({ hod: req.admin._id });
 
     const existingSection = await Section.findOne({ branch, year, section });
 

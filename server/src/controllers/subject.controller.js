@@ -2,6 +2,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Subject } from "../models/subject.model.js";
 import { User } from "../models/user.model.js";
+import { Section } from "../models/section.model.js";
 import { isHod, isTeacher } from "../utils/checkRole.js";
 import { Branch } from "../models/branch.model.js";
 
@@ -14,6 +15,12 @@ const createSubject = asyncHandler(async (req, res) => {
 
     if (!name || !code || !section || !semester) {
         return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const sectionExists = await Section.findById(section);
+
+    if (!sectionExists) {
+        return res.status(404).json({ message: "Section not found" });
     }
 
     const existingSubject = await Subject.findOne({

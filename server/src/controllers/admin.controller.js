@@ -87,6 +87,10 @@ const login = asyncHandler(async (req, res) => {
         admin._id
     );
 
+    const loggedInAdmin = await Admin.findById(admin._id).select(
+        "-password -refreshToken"
+    );
+
     const options = {
         httpOnly: true,
         secure: true,
@@ -108,8 +112,13 @@ const logout = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: "Admin not found" });
     }
 
-    admin.refreshToken = "";
-    await admin.save({ validateBeforeSave: false });
+    await Admin.findByIdAndUpdate(
+        admin._id,
+        {
+            $unset: { refreshToken: 1 }, // this removes the field from the document
+        },
+        { new: true }
+    );
 
     return res
         .status(200)
@@ -327,4 +336,5 @@ export {
     sendPasswordResetEmail,
     resetPassword,
     registerHod,
+    getHods,
 };
