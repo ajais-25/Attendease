@@ -101,7 +101,7 @@ const getSubjects = asyncHandler(async (req, res) => {
 });
 
 const assignTeacher = asyncHandler(async (req, res) => {
-    if (!!isHod(req.admin)) {
+    if (!isHod(req.admin)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
@@ -137,13 +137,12 @@ const assignTeacher = asyncHandler(async (req, res) => {
 });
 
 const getTeacherSubjects = asyncHandler(async (req, res) => {
-    if (!isTeacher(req.teacher)) {
+    if (!isTeacher(req.user)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
     const subjects = await Subject.find({
-        semester,
-        assignedTo: req.teacher._id,
+        assignedTo: req.user._id,
     });
 
     if (!subjects) {

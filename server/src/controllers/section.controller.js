@@ -78,17 +78,13 @@ const deleteSection = asyncHandler(async (req, res) => {
 });
 
 const getTeacherSections = asyncHandler(async (req, res) => {
-    if (!isTeacher(req.admin)) {
+    if (!isTeacher(req.user)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
-    const sections = await Subject.aggregate([
-        {
-            $group: {
-                _id: "$section",
-            },
-        },
-    ]);
+    const sections = await Subject.distinct("section", {
+        assignedTo: req.user._id,
+    });
 
     if (!sections) {
         return res.status(404).json({ message: "Sections not found" });

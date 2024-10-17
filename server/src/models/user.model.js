@@ -21,14 +21,11 @@ const userSchema = new Schema(
             required: true,
             enum: ["student", "teacher"],
         },
-        branch: [
-            // 1 for student, many for teacher
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Branch",
-                required: true,
-            },
-        ],
+        branch: {
+            type: Schema.Types.ObjectId,
+            ref: "Branch",
+            required: true,
+        },
         year: {
             // for student
             type: Number,

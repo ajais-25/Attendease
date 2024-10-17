@@ -36,39 +36,47 @@ const register = asyncHandler(async (req, res) => {
         semester,
     } = req.body;
 
-    if (
-        !name ||
-        !email ||
-        !password ||
-        !enrollment ||
-        !role ||
-        !branch ||
-        !year ||
-        !section ||
-        !semester
-    ) {
+    if (!name || !email || !password || !enrollment || !role || !branch) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
+    if (role === "student" && (!year || !section || !semester)) {
+        return res.status(400).json({
+            message: "All fields are required",
+        });
+    }
+
     const existingUser = await User.findOne({
-        $or: [{ email }, { enrollmentNumber }],
+        $or: [{ email }, { enrollment }],
     });
 
     if (existingUser) {
         return res.status(400).json({ message: "User already exists" });
     }
 
-    const user = await User.create({
-        name,
-        email,
-        password,
-        enrollment,
-        role,
-        branch,
-        year,
-        section,
-        semester,
-    });
+    let user;
+    if (role === "teacher") {
+        user = await User.create({
+            name,
+            email,
+            password,
+            enrollment,
+            role,
+            branch,
+        });
+    } else {
+        user = await User.create({
+            name,
+            email,
+            password,
+            enrollment,
+            role,
+            branch,
+            year,
+            section,
+            semester,
+        });
+    }
 
     const createdUser = await User.findById(user._id)
         .populate("branch")
@@ -303,7 +311,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, req.user, "User fetched successfully"));
 });
 
-// for teacher and admin, but teacher can only see his/her teaching subjects
+// for teacher, but teacher can only see his/her teaching subjects
 const getUserProfile = asyncHandler(async (req, res) => {
     const { userId } = req.params;
 
