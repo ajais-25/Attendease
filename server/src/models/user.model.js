@@ -26,10 +26,6 @@ const userSchema = new Schema(
             ref: "Branch",
             required: true,
         },
-        year: {
-            // for student
-            type: Number,
-        },
         section: {
             // for student
             type: String,

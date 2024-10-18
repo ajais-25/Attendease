@@ -1,7 +1,7 @@
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Attendance } from "../models/attendance.model.js";
-import { isTeacher } from "../utils/checkRole.js";
+import { isStudent, isTeacher } from "../utils/checkRole.js";
 
 // for teacher
 const createAttendance = asyncHandler(async (req, res) => {
@@ -11,7 +11,7 @@ const createAttendance = asyncHandler(async (req, res) => {
 
     const { section, subject, date, semester } = req.body;
 
-    if (!section || !subject || !date || !semester) {
+    if (!section || !subject || !date) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -20,7 +20,6 @@ const createAttendance = asyncHandler(async (req, res) => {
         subject,
         teacher: req.user._id,
         date,
-        semester,
     });
 
     if (!attendance) {
@@ -36,7 +35,7 @@ const createAttendance = asyncHandler(async (req, res) => {
         );
 });
 
-const getAllAttendance = asyncHandler(async (req, res) => {
+const getTeacherAttendance = asyncHandler(async (req, res) => {
     if (!isTeacher(req.user)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
@@ -54,16 +53,14 @@ const getAllAttendance = asyncHandler(async (req, res) => {
 });
 
 const getAttendance = asyncHandler(async (req, res) => {
+    console.log("Here");
     if (!isTeacher(req.user)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
     const { attendanceId } = req.params;
 
-    const attendance = await Attendance.findOne({
-        _id: attendanceId,
-        teacher: req.user._id,
-    })
+    const attendance = await Attendance.findById(attendanceId)
         .populate("section")
         .populate("subject")
         .populate("studentsPresent");
@@ -109,9 +106,30 @@ const completeAttendance = asyncHandler(async (req, res) => {
         );
 });
 
+// for student
+const getStudentAttendance = asyncHandler(async (req, res) => {
+    if (!isStudent(req.user)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const attendance = await Attendance.find({
+        section: req.user.section,
+    })
+        .populate("section")
+        .populate("subject")
+        .populate("teacher");
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, attendance, "Attendance fetched successfully")
+        );
+});
+
 export {
     createAttendance,
-    getAllAttendance,
+    getTeacherAttendance,
     getAttendance,
     completeAttendance,
+    getStudentAttendance,
 };

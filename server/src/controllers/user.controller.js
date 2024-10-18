@@ -31,7 +31,6 @@ const register = asyncHandler(async (req, res) => {
         enrollment,
         role,
         branch,
-        year,
         section,
         semester,
     } = req.body;
@@ -40,7 +39,7 @@ const register = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (role === "student" && (!year || !section || !semester)) {
+    if (role === "student" && (!section || !semester)) {
         return res.status(400).json({
             message: "All fields are required",
         });
@@ -72,7 +71,6 @@ const register = asyncHandler(async (req, res) => {
             enrollment,
             role,
             branch,
-            year,
             section,
             semester,
         });
