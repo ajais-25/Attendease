@@ -2,6 +2,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Attendance } from "../models/attendance.model.js";
 import { isStudent, isTeacher } from "../utils/checkRole.js";
+import mongoose from "mongoose";
 
 // for teacher
 const createAttendance = asyncHandler(async (req, res) => {
@@ -35,12 +36,37 @@ const createAttendance = asyncHandler(async (req, res) => {
         );
 });
 
-const getTeacherAttendance = asyncHandler(async (req, res) => {
+const getTeacherAllAttendanceComplete = asyncHandler(async (req, res) => {
     if (!isTeacher(req.user)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
-    const attendance = await Attendance.find({ teacher: req.user._id })
+    const attendance = await Attendance.find({
+        teacher: req.user._id,
+        isCompleted: true,
+    })
+        .sort({ createdAt: -1 })
+        .populate("section")
+        .populate("subject")
+        .populate("studentsPresent");
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, attendance, "Attendance fetched successfully")
+        );
+});
+
+const getTeacherAllAttendanceIncomplete = asyncHandler(async (req, res) => {
+    if (!isTeacher(req.user)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const attendance = await Attendance.find({
+        teacher: req.user._id,
+        isCompleted: false,
+    })
+        .sort({ createdAt: -1 })
         .populate("section")
         .populate("subject")
         .populate("studentsPresent");
@@ -107,14 +133,16 @@ const completeAttendance = asyncHandler(async (req, res) => {
 });
 
 // for student
-const getStudentAttendance = asyncHandler(async (req, res) => {
+const getStudentAllAttendanceIncomplete = asyncHandler(async (req, res) => {
     if (!isStudent(req.user)) {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
     const attendance = await Attendance.find({
         section: req.user.section,
+        isCompleted: false,
     })
+        .sort({ createdAt: -1 })
         .populate("section")
         .populate("subject")
         .populate("teacher");
@@ -126,10 +154,94 @@ const getStudentAttendance = asyncHandler(async (req, res) => {
         );
 });
 
+const markStudentPresent = asyncHandler(async (req, res) => {
+    if (!isStudent(req.user)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const { attendanceId } = req.params;
+
+    const attendance = await Attendance.findById(attendanceId);
+
+    if (!attendance) {
+        return res.status(404).json({ message: "Attendance not found" });
+    }
+
+    if (attendance.isCompleted) {
+        return res
+            .status(400)
+            .json({ message: "Attendance is already completed" });
+    }
+
+    if (
+        attendance.studentsPresent.includes(
+            new mongoose.Types.ObjectId(req.user._id)
+        )
+    ) {
+        return res
+            .status(400)
+            .json({ message: "You are already marked present" });
+    }
+
+    attendance.studentsPresent.push(req.user._id);
+    await attendance.save({ validateBeforeSave: false });
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, "", "Attendance marked successfully"));
+});
+
+const getEachSubjectAttendanceAnalytics = asyncHandler(async (req, res) => {
+    if (!isStudent(req.user)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const attendanceAnalytics = await Attendance.aggregate([
+        {
+            $match: {
+                section: new mongoose.Types.ObjectId(req.user.section),
+            },
+        },
+        {
+            $group: {
+                _id: "$subject",
+                totalClasses: { $sum: 1 },
+                totalPresent: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $in: [
+                                    new mongoose.Types.ObjectId(req.user._id),
+                                    "$studentsPresent",
+                                ],
+                            },
+                            1,
+                            0,
+                        ],
+                    },
+                },
+            },
+        },
+    ]);
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                attendanceAnalytics,
+                "Attendance analytics fetched successfully"
+            )
+        );
+});
+
 export {
     createAttendance,
-    getTeacherAttendance,
+    getTeacherAllAttendanceComplete,
+    getTeacherAllAttendanceIncomplete,
     getAttendance,
     completeAttendance,
-    getStudentAttendance,
+    getStudentAllAttendanceIncomplete,
+    markStudentPresent,
+    getEachSubjectAttendanceAnalytics,
 };
