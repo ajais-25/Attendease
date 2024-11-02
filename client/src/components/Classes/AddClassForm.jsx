@@ -19,7 +19,7 @@ const AddClassForm = ({ displayForm, setDisplayForm }) => {
       {displayForm && (
         <div className="bg-white p-6 py-10 rounded-lg shadow-lg w-full relative">
           <div
-            className="absolute top-2 right-4 text-lg cursor-pointer"
+            className="absolute top-2 right-4 text-lg cursor-pointer hover:bg-gray-300 px-2 rounded-md"
             onClick={() => setDisplayForm(false)}
           >
             X
@@ -60,7 +60,7 @@ const AddClassForm = ({ displayForm, setDisplayForm }) => {
 
             {/* Date Picker */}
             <input
-              className="w-full"
+              className="w-full border p-3 rounded-md border-gray-300 focus:outline-none focus:border-blue-500 cursor-pointer"
               type="date"
               name="date"
               id="date"

@@ -4,6 +4,7 @@ import AddClassForm from "../components/Classes/AddClassForm";
 
 const Classes = () => {
   const [displayForm, setDisplayForm] = useState(false);
+  const [isTeacher, setIsTeacher] = useState(false);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-10">
@@ -23,22 +24,24 @@ const Classes = () => {
             Scheduled Classes
           </span>
           {/* Should only be for teacher, remove while integration */}
-          <button
-            className="text-white px-4 py-2 flex justify-center items-center gap-2 transition-all duration-300 bg-primary-600 hover:bg-primary-700 active:scale-95 rounded-md"
-            onClick={() => setDisplayForm(true)}
-          >
-            <i className="fa-solid fa-plus"></i>
-            Add Class
-          </button>
+          {isTeacher && (
+            <button
+              className="text-white px-4 py-2 flex justify-center items-center gap-2 transition-all duration-300 bg-primary-600 hover:bg-primary-700 active:scale-95 rounded-md"
+              onClick={() => setDisplayForm(true)}
+            >
+              <i className="fa-solid fa-plus"></i>
+              Add Class
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-4 gap-y-6 gap-x-2">
-          <ClassCard isTeacher={true} />
-          <ClassCard isTeacher={true} />
-          <ClassCard isTeacher={true} />
-          <ClassCard isTeacher={true} />
-          <ClassCard isTeacher={true} />
-          <ClassCard isTeacher={true} />
+          <ClassCard isTeacher={isTeacher} />
+          <ClassCard isTeacher={isTeacher} />
+          <ClassCard isTeacher={isTeacher} />
+          <ClassCard isTeacher={isTeacher} />
+          <ClassCard isTeacher={isTeacher} />
+          <ClassCard isTeacher={isTeacher} />
         </div>
       </div>
       <AddClassForm displayForm={displayForm} setDisplayForm={setDisplayForm} />
