@@ -13,6 +13,7 @@ import Classes from "./pages/Classes";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Analytics from "./pages/Analytics";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,8 +24,9 @@ const router = createBrowserRouter(
         <Route path="" element={<div>Home</div>} />
         <Route path="classes" element={<Classes />} />
         <Route path="profile" element={<Profile />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="analytics" element={<Analytics />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );
