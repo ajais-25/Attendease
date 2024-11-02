@@ -12,12 +12,13 @@ import NotFound from "./pages/NotFound";
 import Classes from "./pages/Classes";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="login" element={<Login />} />
-      <Route path="signup" element={<div>Sign Up</div>} />
+      <Route path="signup" element={<SignUp />} />
       <Route path="/" element={<Layout />}>
         <Route path="" element={<div>Home</div>} />
         <Route path="classes" element={<Classes />} />
