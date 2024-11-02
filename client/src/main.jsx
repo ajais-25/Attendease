@@ -10,12 +10,14 @@ import {
 import Layout from "./Layout";
 import NotFound from "./pages/NotFound";
 import Classes from "./pages/Classes";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route path="" element={<div>Home</div>} />
       <Route path="classes" element={<Classes />} />
+      <Route path="profile" element={<Profile />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ClassCard from "../components/Classes/ClassCard";
 import AddClassForm from "../components/Classes/AddClassForm";
+import TopSection from "../components/TopSection";
 
 const Classes = () => {
   const [displayForm, setDisplayForm] = useState(false);
@@ -8,13 +9,7 @@ const Classes = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-10">
-      <div className="flex justify-between w-full bg-white p-4 rounded-md shadow-md mb-6">
-        <h1 className="text-lg font-semibold">Classes</h1>
-        <div className="text-right">
-          <p>Swapnamoy Midya</p>
-          <span className="text-gray-500 text-sm">Student</span>
-        </div>
-      </div>
+      <TopSection title="Classes" name="Swapnamoy Midya" role="Student" />
 
       <div className="w-full bg-white p-6 rounded-md shadow-md">
         <h2 className="text-3xl font-semibold text-blue-600 mb-4">Classes</h2>
