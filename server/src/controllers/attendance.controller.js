@@ -330,7 +330,7 @@ const getEachSubjectAttendanceAnalytics = asyncHandler(async (req, res) => {
                 },
             },
         },
-    ]);
+    ]).sort({ attendancePercentage: -1 });
 
     return res
         .status(200)
