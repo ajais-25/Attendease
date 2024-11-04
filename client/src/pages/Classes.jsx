@@ -1,15 +1,41 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import ClassCard from "../components/Classes/ClassCard";
 import AddClassForm from "../components/Classes/AddClassForm";
 import TopSection from "../components/TopSection";
+import axios from "axios";
+import { API } from "../api";
+import { useSelector } from "react-redux";
 
 const Classes = () => {
   const [displayForm, setDisplayForm] = useState(false);
   const [isTeacher, setIsTeacher] = useState(false);
+  const [classes, setClasses] = useState([]);
+  let suffix = "/s/student";
+
+  const user = useSelector((state) => state.auth.user);
+
+  useLayoutEffect(() => {
+    if (user && user.role === "teacher") {
+      setIsTeacher(true);
+      suffix = "/t/incomplete";
+    }
+
+    const getClasses = async () => {
+      try {
+        const response = await axios.get(`${API}/attendance${suffix}`);
+        setClasses(response.data.data);
+      } catch (error) {
+        console.log("Error fetching classes: ", error);
+        console.error(error);
+      }
+    };
+
+    getClasses();
+  }, []);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-10">
-      <TopSection title="Classes" name="Swapnamoy Midya" role="Student" />
+      <TopSection title="Classes" />
 
       <div className="w-full bg-white p-6 rounded-md shadow-md">
         <h2 className="text-3xl font-semibold text-blue-600 mb-4">Classes</h2>
@@ -31,12 +57,13 @@ const Classes = () => {
         </div>
 
         <div className="grid grid-cols-4 gap-y-6 gap-x-2">
-          <ClassCard isTeacher={isTeacher} />
-          <ClassCard isTeacher={isTeacher} />
-          <ClassCard isTeacher={isTeacher} />
-          <ClassCard isTeacher={isTeacher} />
-          <ClassCard isTeacher={isTeacher} />
-          <ClassCard isTeacher={isTeacher} />
+          {classes.map((classDetails) => (
+            <ClassCard
+              key={classDetails._id}
+              isTeacher={isTeacher}
+              classDetails={classDetails}
+            />
+          ))}
         </div>
       </div>
       <AddClassForm displayForm={displayForm} setDisplayForm={setDisplayForm} />

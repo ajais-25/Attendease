@@ -1,9 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLeftSection from "../components/AuthLeftSection";
+import { API } from "../api";
+import { login, logout } from "../features/authSlice";
+import { useDispatch } from "react-redux";
 
 function Login() {
   const navigate = useNavigate();
+  const [role, setRole] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const data = {
+      role,
+      email,
+      password,
+    };
+    try {
+      const response = await axios.post(`${API}/users/login`, data);
+      if (response.data.data) {
+        dispatch(login({ user: response.data.data }));
+      } else {
+        dispatch(logout());
+      }
+      navigate("/classes");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex justify-center">
@@ -15,7 +44,10 @@ function Login() {
         />
 
         {/* Right Section */}
-        <div className="flex-1 flex flex-col items-center text-center">
+        <form
+          onSubmit={handleLogin}
+          className="flex-1 flex flex-col items-center text-center"
+        >
           <h2 className="text-2xl font-bold text-black mb-6">
             Select Your Role
           </h2>
@@ -23,11 +55,19 @@ function Login() {
           {/* Role Selection */}
           <div className="flex justify-center mb-4 space-x-4">
             <label className="flex items-center space-x-2">
-              <input type="radio" name="role" />
+              <input
+                type="radio"
+                name="role"
+                onClick={() => setRole("student")}
+              />
               <span className="font-medium">Student</span>
             </label>
             <label className="flex items-center space-x-2">
-              <input type="radio" name="role" />
+              <input
+                type="radio"
+                name="role"
+                onClick={() => setRole("teacher")}
+              />
               <span className="font-medium">Teacher</span>
             </label>
             <label
@@ -42,9 +82,11 @@ function Login() {
           {/* Input Fields */}
           <div className="w-full max-w-xs mb-4">
             <input
-              type="text"
-              placeholder="Enrollment No."
+              type="email"
+              placeholder="Email"
               className="w-full p-3 rounded-lg bg-[#3D70F5] text-white placeholder-white focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="w-full max-w-xs mb-6">
@@ -52,6 +94,8 @@ function Login() {
               type="password"
               placeholder="Enter Password"
               className="w-full p-3 rounded-lg bg-[#3D70F5] text-white placeholder-white focus:outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -70,7 +114,7 @@ function Login() {
               Sign Up
             </Link>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );

@@ -138,14 +138,95 @@ const getStudentAllAttendanceIncomplete = asyncHandler(async (req, res) => {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
-    const attendance = await Attendance.find({
-        section: req.user.section,
-        isCompleted: false,
-    })
-        .sort({ createdAt: -1 })
-        .populate("section")
-        .populate("subject")
-        .populate("teacher");
+    const attendance = await Attendance.aggregate([
+        {
+            $match: {
+                section: new mongoose.Types.ObjectId(req.user.section),
+                isCompleted: false,
+            },
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "teacher",
+                foreignField: "_id",
+                as: "teacher",
+            },
+        },
+        {
+            $unwind: "$teacher",
+        },
+        {
+            $lookup: {
+                from: "subjects",
+                localField: "subject",
+                foreignField: "_id",
+                as: "subject",
+            },
+        },
+        {
+            $unwind: "$subject",
+        },
+        {
+            $lookup: {
+                from: "sections",
+                localField: "section",
+                foreignField: "_id",
+                as: "section",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "branches",
+                            localField: "branch",
+                            foreignField: "_id",
+                            as: "branch",
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            year: 1,
+                            section: 1,
+                            branch: {
+                                $arrayElemAt: ["$branch", 0],
+                            },
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $unwind: "$section",
+        },
+        {
+            $project: {
+                _id: 1,
+                date: 1,
+                time: 1,
+                isCompleted: 1,
+                studentsPresent: 1,
+                teacher: {
+                    _id: 1,
+                    name: 1,
+                    email: 1,
+                },
+                subject: {
+                    _id: 1,
+                    name: 1,
+                    code: 1,
+                },
+                section: {
+                    _id: 1,
+                    branch: {
+                        _id: 1,
+                        name: 1,
+                    },
+                    year: 1,
+                    section: 1,
+                },
+            },
+        },
+    ]);
 
     return res
         .status(200)
