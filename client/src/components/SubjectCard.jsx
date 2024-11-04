@@ -15,18 +15,18 @@ const SubjectCard = ({ subject }) => {
       className="flex items-center justify-between p-4 bg-[#F0F7FF] shadow-lg rounded-lg mb-4"
     >
       <div>
-        <h3 className="font-semibold text-gray-700">{subject.name}</h3>
+        <h3 className="font-semibold text-gray-700">{subject.subject}</h3>
         <p className="text-sm text-gray-500">
-          {subject.attended}/{subject.total}
+          {subject.totalPresent}/{subject.totalClasses}
         </p>
       </div>
       <div className="w-16 h-16">
         <CircularProgressbar
-          value={subject.score}
-          text={`${subject.score}%`}
+          value={subject.attendancePercentage}
+          text={`${subject.attendancePercentage}%`}
           styles={buildStyles({
-            pathColor: getColor(subject.score),
-            textColor: getColor(subject.score),
+            pathColor: getColor(subject.attendancePercentage),
+            textColor: getColor(subject.attendancePercentage),
             trailColor: "#e0e0e0",
           })}
         />

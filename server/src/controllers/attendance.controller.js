@@ -303,6 +303,33 @@ const getEachSubjectAttendanceAnalytics = asyncHandler(async (req, res) => {
                 },
             },
         },
+        {
+            $lookup: {
+                from: "subjects",
+                localField: "_id",
+                foreignField: "_id",
+                as: "subject",
+            },
+        },
+        {
+            $unwind: "$subject",
+        },
+        {
+            $project: {
+                _id: 1,
+                subject: "$subject.name",
+                totalClasses: 1,
+                totalPresent: 1,
+                attendancePercentage: {
+                    $multiply: [
+                        {
+                            $divide: ["$totalPresent", "$totalClasses"],
+                        },
+                        100,
+                    ],
+                },
+            },
+        },
     ]);
 
     return res
