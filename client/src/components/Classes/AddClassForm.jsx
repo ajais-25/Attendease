@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { API } from "../../api";
 
-const AddClassForm = ({ displayForm, setDisplayForm }) => {
+const AddClassForm = ({ displayForm, setDisplayForm, setChange }) => {
   const [batch, setBatch] = useState("");
   const [subject, setSubject] = useState("");
   const [date, setDate] = useState("");
@@ -44,8 +44,8 @@ const AddClassForm = ({ displayForm, setDisplayForm }) => {
         date,
         time,
       });
-      console.log(response.data);
       setDisplayForm(false);
+      setChange((prev) => !prev);
     } catch (error) {
       console.log(error);
     }
@@ -74,6 +74,7 @@ const AddClassForm = ({ displayForm, setDisplayForm }) => {
             {/* Batch Dropdown */}
             <div>
               <select
+                name="batch"
                 value={batch}
                 onChange={(e) => setBatch(e.target.value)}
                 className="w-full p-3 border rounded-md cursor-pointer border-gray-300 focus:outline-none focus:border-blue-500"
@@ -91,6 +92,7 @@ const AddClassForm = ({ displayForm, setDisplayForm }) => {
             {/* Subject Dropdown */}
             <div>
               <select
+                name="subject"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 className="w-full p-3 border rounded-md border-gray-300 focus:outline-none cursor-pointer focus:border-blue-500"

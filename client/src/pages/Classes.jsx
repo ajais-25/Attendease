@@ -5,11 +5,14 @@ import TopSection from "../components/TopSection";
 import axios from "axios";
 import { API } from "../api";
 import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
 
 const Classes = () => {
   const [displayForm, setDisplayForm] = useState(false);
   const [isTeacher, setIsTeacher] = useState(false);
   const [classes, setClasses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [change, setChange] = useState(false);
   let suffix = "/s/student";
 
   const user = useSelector((state) => state.auth.user);
@@ -27,11 +30,13 @@ const Classes = () => {
       } catch (error) {
         console.log("Error fetching classes: ", error);
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getClasses();
-  }, []);
+  }, [change]);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-10">
@@ -56,6 +61,7 @@ const Classes = () => {
           )}
         </div>
 
+        {loading && <Loading />}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center gap-y-6 gap-x-2">
           {classes.map((classDetails) => (
             <ClassCard
@@ -66,7 +72,11 @@ const Classes = () => {
           ))}
         </div>
       </div>
-      <AddClassForm displayForm={displayForm} setDisplayForm={setDisplayForm} />
+      <AddClassForm
+        displayForm={displayForm}
+        setDisplayForm={setDisplayForm}
+        setChange={setChange}
+      />
     </div>
   );
 };
