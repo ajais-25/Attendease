@@ -305,6 +305,9 @@ const getStudentAllAttendanceIncomplete = asyncHandler(async (req, res) => {
         {
             $match: {
                 section: new mongoose.Types.ObjectId(req.user.section),
+                studentsPresent: {
+                    $ne: new mongoose.Types.ObjectId(req.user._id),
+                },
                 isCompleted: false,
             },
         },
