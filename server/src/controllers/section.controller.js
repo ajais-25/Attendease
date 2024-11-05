@@ -82,9 +82,50 @@ const getTeacherSections = asyncHandler(async (req, res) => {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
-    const sections = await Subject.distinct("section", {
-        assignedTo: req.user._id,
-    });
+    const sections = await Subject.aggregate([
+        {
+            $match: {
+                assignedTo: req.user._id,
+            },
+        },
+        {
+            $group: {
+                _id: "$section",
+            },
+        },
+        {
+            $lookup: {
+                from: "sections",
+                localField: "_id",
+                foreignField: "_id",
+                as: "section",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "branches",
+                            localField: "branch",
+                            foreignField: "_id",
+                            as: "branch",
+                        },
+                    },
+                    {
+                        $unwind: "$branch",
+                    },
+                ],
+            },
+        },
+        {
+            $unwind: "$section",
+        },
+        {
+            $project: {
+                _id: "$section._id",
+                branch: "$section.branch.name",
+                year: "$section.year",
+                section: "$section.section",
+            },
+        },
+    ]);
 
     if (!sections) {
         return res.status(404).json({ message: "Sections not found" });

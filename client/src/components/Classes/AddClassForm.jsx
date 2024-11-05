@@ -1,17 +1,59 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { API } from "../../api";
 
 const AddClassForm = ({ displayForm, setDisplayForm }) => {
   const [batch, setBatch] = useState("");
   const [subject, setSubject] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
-  const handleSubmit = (e) => {
+  const [teacherSubjects, setTeacherSubjects] = useState([]);
+  const [teacherSections, setTeacherSections] = useState([]);
+
+  const getTeacherSubjects = async () => {
+    try {
+      const response = await axios.get(`${API}/subject/teacher-subjects`);
+      setTeacherSubjects(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTeacherSections = async () => {
+    try {
+      const response = await axios.get(`${API}/section/teacher-sections`);
+      setTeacherSections(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTeacherSubjects();
+    getTeacherSections();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Submit form logic
-    console.log({ batch, subject, date });
+
+    try {
+      const response = await axios.post(`${API}/attendance/create`, {
+        section: batch,
+        subject,
+        date,
+        time,
+      });
+      console.log(response.data);
+      setDisplayForm(false);
+    } catch (error) {
+      console.log(error);
+    }
+
     setBatch("");
     setSubject("");
     setDate("");
+    setTime("");
   };
 
   return (
@@ -37,10 +79,12 @@ const AddClassForm = ({ displayForm, setDisplayForm }) => {
                 className="w-full p-3 border rounded-md cursor-pointer border-gray-300 focus:outline-none focus:border-blue-500"
               >
                 <option value="">Select Batch</option>
-                <option value="CST 3A">CST 3A</option>
-                <option value="CST 3A">CST 3B</option>
-                <option value="CST 2C">CST 3C</option>
-                {/* Add more options as needed */}
+                {teacherSections.map((section) => (
+                  <option key={section._id} value={section._id}>
+                    {section.branch} {section.year}
+                    {section.section}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -52,21 +96,33 @@ const AddClassForm = ({ displayForm, setDisplayForm }) => {
                 className="w-full p-3 border rounded-md border-gray-300 focus:outline-none cursor-pointer focus:border-blue-500"
               >
                 <option value="">Select Subject</option>
-                <option value="Software Engineering">AIML</option>
-                <option value="Agile Programming">DBMS</option>
-                {/* Add more options as needed */}
+                {teacherSubjects.map((subject) => (
+                  <option key={subject._id} value={subject._id}>
+                    {subject.name}
+                  </option>
+                ))}
               </select>
             </div>
 
             {/* Date Picker */}
-            <input
-              className="w-full border p-3 rounded-md border-gray-300 focus:outline-none focus:border-blue-500 cursor-pointer"
-              type="date"
-              name="date"
-              id="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
+            <div className="flex gap-4 justify-between items-center">
+              <input
+                className="w-full border p-3 rounded-md border-gray-300 focus:outline-none focus:border-blue-500 cursor-pointer"
+                type="date"
+                name="date"
+                id="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+              <input
+                className="w-full border p-3 rounded-md border-gray-300 focus:outline-none focus:border-blue-500 cursor-pointer"
+                type="time"
+                name="time"
+                id="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+            </div>
 
             {/* Submit Button */}
             <button

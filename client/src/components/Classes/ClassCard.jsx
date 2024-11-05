@@ -1,12 +1,6 @@
 import React from "react";
 
 const ClassCard = ({ isTeacher, classDetails }) => {
-  const formatterTime = new Intl.DateTimeFormat("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-
   const formatterDate = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
@@ -30,7 +24,11 @@ const ClassCard = ({ isTeacher, classDetails }) => {
         <div className="flex items-center mr-4">
           <span className="material-icons text-lg">access_time</span>
           <span className="ml-1">
-            {formatterTime.format(new Date(classDetails.time))}
+            {classDetails.time.slice(0, 2) > 12
+              ? classDetails.time.slice(0, 2) - 12
+              : classDetails.time.slice(0, 2)}
+            :{classDetails.time.slice(3)}{" "}
+            {classDetails.time.slice(0, 2) >= 12 ? "PM" : "AM"}
           </span>
         </div>
         <div className="flex items-center">

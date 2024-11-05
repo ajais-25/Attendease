@@ -22,9 +22,8 @@ const attendanceSchema = new Schema(
             required: true,
         },
         time: {
-            type: Date,
+            type: String,
             required: true,
-            default: Date.now,
         },
         // semester: {
         //     type: Number,

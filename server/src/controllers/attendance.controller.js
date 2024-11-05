@@ -10,9 +10,9 @@ const createAttendance = asyncHandler(async (req, res) => {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
-    const { section, subject, date, semester } = req.body;
+    const { section, subject, date, time } = req.body;
 
-    if (!section || !subject || !date) {
+    if (!section || !subject || !date || !time) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -21,6 +21,7 @@ const createAttendance = asyncHandler(async (req, res) => {
         subject,
         teacher: req.user._id,
         date,
+        time,
     });
 
     if (!attendance) {
@@ -41,14 +42,95 @@ const getTeacherAllAttendanceComplete = asyncHandler(async (req, res) => {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
-    const attendance = await Attendance.find({
-        teacher: req.user._id,
-        isCompleted: true,
-    })
-        .sort({ createdAt: -1 })
-        .populate("section")
-        .populate("subject")
-        .populate("studentsPresent");
+    const attendance = await Attendance.aggregate([
+        {
+            $match: {
+                teacher: new mongoose.Types.ObjectId(req.user._id),
+                isCompleted: true,
+            },
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "teacher",
+                foreignField: "_id",
+                as: "teacher",
+            },
+        },
+        {
+            $unwind: "$teacher",
+        },
+        {
+            $lookup: {
+                from: "subjects",
+                localField: "subject",
+                foreignField: "_id",
+                as: "subject",
+            },
+        },
+        {
+            $unwind: "$subject",
+        },
+        {
+            $lookup: {
+                from: "sections",
+                localField: "section",
+                foreignField: "_id",
+                as: "section",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "branches",
+                            localField: "branch",
+                            foreignField: "_id",
+                            as: "branch",
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            year: 1,
+                            section: 1,
+                            branch: {
+                                $arrayElemAt: ["$branch", 0],
+                            },
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $unwind: "$section",
+        },
+        {
+            $project: {
+                _id: 1,
+                date: 1,
+                time: 1,
+                isCompleted: 1,
+                studentsPresent: 1,
+                teacher: {
+                    _id: 1,
+                    name: 1,
+                    email: 1,
+                },
+                subject: {
+                    _id: 1,
+                    name: 1,
+                    code: 1,
+                },
+                section: {
+                    _id: 1,
+                    branch: {
+                        _id: 1,
+                        name: 1,
+                    },
+                    year: 1,
+                    section: 1,
+                },
+            },
+        },
+    ]);
 
     return res
         .status(200)
@@ -62,14 +144,95 @@ const getTeacherAllAttendanceIncomplete = asyncHandler(async (req, res) => {
         return res.status(403).json({ message: "Unauthorized request" });
     }
 
-    const attendance = await Attendance.find({
-        teacher: req.user._id,
-        isCompleted: false,
-    })
-        .sort({ createdAt: -1 })
-        .populate("section")
-        .populate("subject")
-        .populate("studentsPresent");
+    const attendance = await Attendance.aggregate([
+        {
+            $match: {
+                teacher: new mongoose.Types.ObjectId(req.user._id),
+                isCompleted: false,
+            },
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "teacher",
+                foreignField: "_id",
+                as: "teacher",
+            },
+        },
+        {
+            $unwind: "$teacher",
+        },
+        {
+            $lookup: {
+                from: "subjects",
+                localField: "subject",
+                foreignField: "_id",
+                as: "subject",
+            },
+        },
+        {
+            $unwind: "$subject",
+        },
+        {
+            $lookup: {
+                from: "sections",
+                localField: "section",
+                foreignField: "_id",
+                as: "section",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "branches",
+                            localField: "branch",
+                            foreignField: "_id",
+                            as: "branch",
+                        },
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            year: 1,
+                            section: 1,
+                            branch: {
+                                $arrayElemAt: ["$branch", 0],
+                            },
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $unwind: "$section",
+        },
+        {
+            $project: {
+                _id: 1,
+                date: 1,
+                time: 1,
+                isCompleted: 1,
+                studentsPresent: 1,
+                teacher: {
+                    _id: 1,
+                    name: 1,
+                    email: 1,
+                },
+                subject: {
+                    _id: 1,
+                    name: 1,
+                    code: 1,
+                },
+                section: {
+                    _id: 1,
+                    branch: {
+                        _id: 1,
+                        name: 1,
+                    },
+                    year: 1,
+                    section: 1,
+                },
+            },
+        },
+    ]);
 
     return res
         .status(200)
