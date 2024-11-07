@@ -35,11 +35,11 @@ const register = asyncHandler(async (req, res) => {
         semester,
     } = req.body;
 
-    if (!name || !email || !password || !enrollment || !role || !branch) {
+    if (!name || !email || !password || !enrollment || !role) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (role === "student" && (!section || !semester)) {
+    if (role === "student" && (!section || !semester || !branch)) {
         return res.status(400).json({
             message: "All fields are required",
         });
@@ -61,7 +61,6 @@ const register = asyncHandler(async (req, res) => {
             password,
             enrollment,
             role,
-            branch,
         });
     } else {
         user = await User.create({

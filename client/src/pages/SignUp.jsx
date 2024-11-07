@@ -64,17 +64,6 @@ const SignUp = () => {
               className="w-full p-3 rounded-lg bg-[#3D70F5] text-white placeholder-white focus:outline-none"
             />
           </div>
-          <div className="w-full max-w-xs mb-4">
-            <select
-              name="batch"
-              id="batch"
-              className="w-full p-3 rounded-lg bg-[#3D70F5] text-white placeholder-white focus:outline-none"
-            >
-              <option value="branch">Select Branch</option>
-              <option value="CST">CST</option>
-              <option value="CSIT">CSIT</option>
-            </select>
-          </div>
           {role === "student" && (
             <div className="w-full max-w-xs mb-4">
               <select
