@@ -9,7 +9,7 @@ export default function SearchBar() {
   return (
     <div className='flex gap-3 border-2 border-black p-2 rounded-md'>
       <CiSearch className='w-6 h-6'/>
-      <input type="text" placeholder='Quick Search' value={text} onChange={(e)=>setText(e.target.value)} className='outline-none border-none w-72'/>
+      <input type="text" placeholder='Quick Search...' value={text} onChange={(e)=>setText(e.target.value)} className='outline-none border-none w-72'/>
     </div>
   )
 }
