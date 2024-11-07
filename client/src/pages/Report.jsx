@@ -11,12 +11,12 @@ export default function Report() {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     const now = new Date();
     const students = [
-        { id: "TIPSGRM1012223", name: "Swapnamoy Midya", status: true },
-        { id: "TIPSGRM1012223", name: "Prithvi Sen", status: true },
-        { id: "TIPSGRM1012223", name: "Akshat Jaiswal", status: true },
-        { id: "TIPSGRM1012223", name: "Sarthak Kumar", status: true },
-        { id: "TIPSGRM1012223", name: "Souvik Kundu", status: true },
-        { id: "TIPSGRM1012223", name: "Swapnamoy Midya", status: false }
+        { id: "TIPSGRM1012223", name: "Swapnamoy Midya" },
+        { id: "TIPSGRM1012223", name: "Prithvi Sen"},
+        { id: "TIPSGRM1012223", name: "Akshat Jaiswal"},
+        { id: "TIPSGRM1012223", name: "Sarthak Kumar"},
+        { id: "TIPSGRM1012223", name: "Souvik Kundu" },
+        { id: "TIPSGRM1012223", name: "Swapnamoy Midya"}
     ]
     return (
         <div className='bg-gray-100 h-screen p-6'>
@@ -58,10 +58,7 @@ export default function Report() {
                                 <span className='text-lg'>{std.id}</span>
                                 <span className='text-lg'>{std.name}</span>
                             </div>
-                            {std.status ?
-                                <span className='text-lg bg-[#E5FFF7] p-2 text-[#0CBC8B] rounded-md w-20 text-center h-10'>Present</span> :
-                                <span className='text-lg bg-[#ede0e0] p-2 text-[#b42b2b] rounded-md w-20 text-center h-10'>Absent</span>
-                            }
+                            <span className='text-lg bg-[#E5FFF7] p-2 text-[#0CBC8B] rounded-md w-20 text-center h-10'>Present</span> 
                         </div>
                     ))}
                 </div>
