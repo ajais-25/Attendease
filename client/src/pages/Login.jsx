@@ -12,6 +12,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState("");
+
   const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
@@ -24,13 +26,14 @@ function Login() {
     try {
       const response = await axios.post(`${API}/users/login`, data);
       if (response.data.data) {
+        setError("");
         dispatch(login({ user: response.data.data }));
       } else {
         dispatch(logout());
       }
       navigate("/classes");
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.message);
     }
   };
 
@@ -98,6 +101,8 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+
+          {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
 
           {/* Proceed Button */}
           <button className="w-full max-w-xs bg-[#3D70F5] text-white font-semibold py-3 rounded-lg shadow-md hover:bg-[#4875d1] transition duration-300">
