@@ -25,10 +25,10 @@ const attendanceSchema = new Schema(
             type: String,
             required: true,
         },
-        // semester: {
-        //     type: Number,
-        //     required: true,
-        // },
+        isActive: {
+            type: Boolean,
+            default: false,
+        },
         isCompleted: {
             type: Boolean,
             default: false,

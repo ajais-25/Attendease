@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { API } from "../../api";
+import { useSelector } from "react-redux";
 
 const AddClassForm = ({ displayForm, setDisplayForm, setChange }) => {
   const [batch, setBatch] = useState("");
@@ -10,6 +11,8 @@ const AddClassForm = ({ displayForm, setDisplayForm, setChange }) => {
 
   const [teacherSubjects, setTeacherSubjects] = useState([]);
   const [teacherSections, setTeacherSections] = useState([]);
+
+  const user = useSelector((state) => state.auth.user);
 
   const getTeacherSubjects = async () => {
     try {
@@ -29,7 +32,8 @@ const AddClassForm = ({ displayForm, setDisplayForm, setChange }) => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (user.role !== "teacher") return;
     getTeacherSubjects();
     getTeacherSections();
   }, []);

@@ -108,6 +108,7 @@ const getTeacherAllAttendanceComplete = asyncHandler(async (req, res) => {
                 date: 1,
                 time: 1,
                 isCompleted: 1,
+                isActive: 1,
                 studentsPresent: 1,
                 teacher: {
                     _id: 1,
@@ -130,7 +131,7 @@ const getTeacherAllAttendanceComplete = asyncHandler(async (req, res) => {
                 },
             },
         },
-    ]);
+    ]).sort({ date: 1, time: 1 });
 
     return res
         .status(200)
@@ -210,6 +211,7 @@ const getTeacherAllAttendanceIncomplete = asyncHandler(async (req, res) => {
                 date: 1,
                 time: 1,
                 isCompleted: 1,
+                isActive: 1,
                 studentsPresent: 1,
                 teacher: {
                     _id: 1,
@@ -232,7 +234,7 @@ const getTeacherAllAttendanceIncomplete = asyncHandler(async (req, res) => {
                 },
             },
         },
-    ]);
+    ]).sort({ date: 1, time: 1 });
 
     return res
         .status(200)
@@ -282,6 +284,7 @@ const completeAttendance = asyncHandler(async (req, res) => {
     }
 
     attendance.isCompleted = true;
+    attendance.isActive = false;
     await attendance.save({ validateBeforeSave: false });
 
     return res
@@ -291,6 +294,36 @@ const completeAttendance = asyncHandler(async (req, res) => {
                 200,
                 attendance,
                 "Attendance completed successfully"
+            )
+        );
+});
+
+const changeActiveStatus = asyncHandler(async (req, res) => {
+    if (!isTeacher(req.user)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const { attendanceId } = req.params;
+
+    const attendance = await Attendance.findOne({
+        _id: attendanceId,
+        teacher: req.user._id,
+    });
+
+    if (!attendance) {
+        return res.status(404).json({ message: "Attendance not found" });
+    }
+
+    attendance.isActive = !attendance.isActive;
+    await attendance.save({ validateBeforeSave: false });
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                attendance,
+                "Attendance status changed successfully"
             )
         );
 });
@@ -370,6 +403,7 @@ const getStudentAllAttendanceIncomplete = asyncHandler(async (req, res) => {
                 date: 1,
                 time: 1,
                 isCompleted: 1,
+                isActive: 1,
                 studentsPresent: 1,
                 teacher: {
                     _id: 1,
@@ -392,7 +426,7 @@ const getStudentAllAttendanceIncomplete = asyncHandler(async (req, res) => {
                 },
             },
         },
-    ]);
+    ]).sort({ date: 1, time: 1 });
 
     return res
         .status(200)
@@ -418,6 +452,10 @@ const markStudentPresent = asyncHandler(async (req, res) => {
         return res
             .status(400)
             .json({ message: "Attendance is already completed" });
+    }
+
+    if (!attendance.isActive) {
+        return res.status(400).json({ message: "Attendance is not active" });
     }
 
     if (
@@ -515,6 +553,7 @@ export {
     getTeacherAllAttendanceIncomplete,
     getAttendance,
     completeAttendance,
+    changeActiveStatus,
     getStudentAllAttendanceIncomplete,
     markStudentPresent,
     getEachSubjectAttendanceAnalytics,

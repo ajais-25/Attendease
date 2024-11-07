@@ -9,6 +9,9 @@ const SubjectCard = ({ subject }) => {
     return "#F44336"; // Red for scores < 50%
   };
 
+  const attendancePercentage =
+    Math.round((subject.totalPresent / subject.totalClasses) * 1000) / 10;
+
   return (
     <div
       key={subject.name}
@@ -22,11 +25,11 @@ const SubjectCard = ({ subject }) => {
       </div>
       <div className="w-16 h-16">
         <CircularProgressbar
-          value={subject.attendancePercentage}
-          text={`${subject.attendancePercentage}%`}
+          value={attendancePercentage}
+          text={`${attendancePercentage}%`}
           styles={buildStyles({
-            pathColor: getColor(subject.attendancePercentage),
-            textColor: getColor(subject.attendancePercentage),
+            pathColor: getColor(attendancePercentage),
+            textColor: getColor(attendancePercentage),
             trailColor: "#e0e0e0",
           })}
         />

@@ -4,6 +4,7 @@ import {
     getTeacherAllAttendanceIncomplete,
     getAttendance,
     completeAttendance,
+    changeActiveStatus,
     getStudentAllAttendanceIncomplete,
     markStudentPresent,
     getEachSubjectAttendanceAnalytics,
@@ -20,6 +21,7 @@ router.route("/t/complete").get(getTeacherAllAttendanceComplete);
 router.route("/t/incomplete").get(getTeacherAllAttendanceIncomplete);
 router.route("/t/:attendanceId").get(getAttendance);
 router.route("/t/:attendanceId/complete").put(completeAttendance);
+router.route("/t/:attendanceId/active").put(changeActiveStatus);
 
 // for student
 router.route("/s/student").get(getStudentAllAttendanceIncomplete);
