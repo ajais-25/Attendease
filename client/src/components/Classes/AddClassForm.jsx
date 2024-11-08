@@ -33,7 +33,7 @@ const AddClassForm = ({ displayForm, setDisplayForm, setChange }) => {
   };
 
   useLayoutEffect(() => {
-    if (user.role !== "teacher") return;
+    if (user?.role !== "teacher") return;
     getTeacherSubjects();
     getTeacherSections();
   }, []);
