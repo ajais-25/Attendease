@@ -4,7 +4,7 @@ import { SlCalender } from "react-icons/sl";
 import { GoClock } from "react-icons/go";
 
 export default function Report() {
-  const subject = "Software Engineering & agile Programming";
+  const subject = "Software Engineering & Agile Programming";
   const branch = "CST";
   const section = "2C";
   const months = [
@@ -29,6 +29,11 @@ export default function Report() {
     { id: "TIPSGRM1012223", name: "Sarthak Kumar" },
     { id: "TIPSGRM1012223", name: "Souvik Kundu" },
     { id: "TIPSGRM1012223", name: "Swapnamoy Midya" },
+    { id: "TIPSGRM1012223", name: "Sarthak Kumar" },
+    { id: "TIPSGRM1012223", name: "Souvik Kundu" },
+    { id: "TIPSGRM1012223", name: "Sarthak Kumar" },
+    { id: "TIPSGRM1012223", name: "Souvik Kundu" },
+    { id: "TIPSGRM1012223", name: "Swapnamoy Midya" },
   ];
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col pl-80 items-center p-6">
@@ -44,9 +49,8 @@ export default function Report() {
         </div>
 
         <div className="flex flex-col md:flex-row justify-start items-center mt-4 gap-10">
-          <span className="font-semibold">
-            <p>{subject.slice(0, 22)}</p>
-            <p>{subject.slice(23)}</p>
+          <span className="font-semibold w-44">
+            <p>{subject}</p>
           </span>
           <span className="p-1 w-40 text-center text-[#989898] text-lg border-[#D3D3D3] border-2 rounded-md">
             Batch {branch} {section}
@@ -60,37 +64,34 @@ export default function Report() {
             {now.getHours() >= 12 ? "PM" : "AM"}
           </span>
         </div>
-        <div className="sm:w-[700px] md:w-full sm:overflow-x-scroll md:overflow-x-hidden">
-          <div className="w-full h-10 grid grid-cols-5 gap-x-4 bg-[#F1F1F1] mt-4 border-2 border-[#D9D9D9]">
-            <span className="col-span-2 text-center sm:text-sm md:text-lg">
-              Student ID
-            </span>
-            <span className="col-span-2 text-center sm:text-sm md:text-lg">
-              Name
-            </span>
-            <span className="col-span-1 sm:text-sm md:text-lg rounded-md  text-start w-16 h-10">
-              Status
-            </span>
-          </div>
-          <div className="md:overflow-y-scroll w-full lg:h-[300px] mt-4">
-            {students.map((std, index) => (
-              <div key={index} className="grid grid-cols-5 h-16 gap-x-4 p-6">
-                <span className="col-span-2 sm:text-sm md:text-lg text-center">
-                  {std.id}
-                </span>
-                <span className="col-span-2 md:hidden sm:text-sm md:text-lg text-center">
-                  {std.name.split(" ").map((char, index) => (
-                    <p key={index}>{char}</p>
-                  ))}
-                </span>
-                <span className="col-span-2 hidden md:block sm:text-sm md:text-lg text-center">
-                  {std.name}
-                </span>
-                <span className="col-span-1 sm:text-sm md:text-lg bg-[#E5FFF7] p-2 text-[#0CBC8B] w-16 rounded-md text-start h-10">
-                  Present
-                </span>
-              </div>
-            ))}
+        <div className="overflow-hidden border-[#D9D9D9] mt-6 rounded-md">
+          <table className="min-w-full">
+            <tbody>
+              <tr className="bg-[#F1F1F1]">
+                <td className="py-2 px-4 w-60 font-bold">Student ID</td>
+                <td className="py-2 px-4 font-bold">Name</td>
+                <td className="py-2 px-3 w-40 font-bold">Status</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Scrollable Table Body */}
+          <div className="h-64 overflow-y-auto">
+            <table className="min-w-full bg-white">
+              <tbody>
+                {students.map((student, index) => (
+                  <tr key={index} className="border-t">
+                    <td className="py-2 px-4 w-60">{student.id}</td>
+                    <td className="py-2 px-4">{student.name}</td>
+                    <td className="py-2 px-4 w-40">
+                      <span className="px-2 py-1 bg-green-100 text-green-600 rounded">
+                        Present
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
