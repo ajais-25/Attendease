@@ -1,12 +1,12 @@
 import React from "react";
 import TopSection from "../components/TopSection";
 
-const Profile = () => {
+const Profile = ({ userRole }) => {
   return (
     <div className="flex min-h-screen pl-72 bg-gray-100">
       <div className="w-full p-6 lg:p-8">
         {/* Header */}
-        <TopSection title="Profile" name="Swapnamoy Midya" role="Student" />
+        <TopSection title="Profile" name="Swapnamoy Midya" role={userRole} />
 
         {/* Profile Content */}
         <div className="bg-blue-100 p-6 rounded-lg border border-blue-300">
@@ -49,16 +49,41 @@ const Profile = () => {
               placeholder="Batch"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
             />
-            <input
-              type="text"
-              placeholder="Year Of Study"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
-            />
-            <input
-              type="text"
-              placeholder="Branch Of Study"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
-            />
+
+            {/* Conditionally Rendered Fields for Students */}
+            {userRole === "Student" && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Year Of Study"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
+                />
+                <input
+                  type="text"
+                  placeholder="Branch Of Study"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
+                />
+              </>
+            )}
+            {/* Conditionally Rendered Fields for Teacher */}
+          {userRole === "Teacher" && (
+            <>
+      
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
+              >
+                <option>Choose Batch</option>
+                <option>Section A</option>
+                <option>Section B</option>
+                <option>Section C</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Your Subjects"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
+              />
+            </>
+          )}
           </div>
         </div>
       </div>
