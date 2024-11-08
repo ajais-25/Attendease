@@ -3,8 +3,8 @@ import TopSection from "../components/TopSection";
 
 const Profile = () => {
   return (
-    <div className="min-h-screen w-full bg-gray-100 flex justify-center p-4">
-      <div className="w-full bg-white rounded-lg shadow-lg p-6 lg:p-8">
+    <div className="flex min-h-screen pl-72 bg-gray-100">
+      <div className="w-full p-6 lg:p-8">
         {/* Header */}
         <TopSection title="Profile" name="Swapnamoy Midya" role="Student" />
 

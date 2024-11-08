@@ -25,7 +25,7 @@ const Analytics = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen pl-80 bg-gray-100 p-6">
       <TopSection title="Analytics" name="Swapnamoy Midya" role="Student" />
 
       <div className="mt-6 text-center">

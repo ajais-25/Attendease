@@ -7,7 +7,6 @@ import { API } from "../api";
 import { useSelector } from "react-redux";
 import Loading from "../components/Loading";
 
-
 const Classes = () => {
   const [displayForm, setDisplayForm] = useState(false);
   const [isTeacher, setIsTeacher] = useState(false);
@@ -40,9 +39,7 @@ const Classes = () => {
   }, [change]);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      
-
+    <div className="flex min-h-screen pl-72 bg-gray-100">
       {/* Main content */}
       <div className="flex flex-col flex-1 items-center p-10">
         <TopSection title="Classes" />
