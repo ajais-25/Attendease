@@ -9,7 +9,7 @@ const TopSection = ({ title }) => {
     <div className="flex justify-between w-full bg-white p-4 rounded-md shadow-md mb-6">
       {title === "report" ? <>
         <div className="text-left">
-          <p>{user && user.name}</p>
+          <p className="sm:text-sm md:text-xl">{user && user.name}</p>
           <span className="text-gray-500 text-sm">
             {user && user.role.slice(0, 1).toUpperCase() + user.role.slice(1)}
           </span>
