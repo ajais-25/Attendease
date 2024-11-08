@@ -70,8 +70,10 @@ const ClassCard = ({ isTeacher, classDetails }) => {
       {!isTeacher && (
         <button
           className={`${
-            classDetails.isActive ? "bg-black" : "bg-gray-300"
-          } w-full transition-all duration-300 active:scale-95 text-white py-2 rounded-md`}
+            classDetails.isActive
+              ? "bg-black transition-all duration-300 active:scale-95"
+              : "bg-gray-300"
+          } w-full text-white py-2 rounded-md`}
           onClick={handleAttendanceClick}
         >
           Mark Attendance
