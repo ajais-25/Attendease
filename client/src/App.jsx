@@ -1,6 +1,7 @@
 import {
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
   Route,
   RouterProvider,
 } from "react-router-dom";
@@ -23,12 +24,12 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<SignUp />} />
       <Route path="/" element={<Layout />}>
-        <Route path="" element={<div>Home</div>} />
-        <Route path="classes" element={<Classes />} />
+        <Route path="" element={<Navigate replace to="/classes" />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="classes" element={<Classes />} />
+        <Route path="classes/:id" element={<Report />} />
         <Route path="analytics" element={<Analytics />} />
-        <Route path="report" element={<Report />} />
-        <Route path="detailedanalytics" element={<DetailedAnalytics />} />
+        <Route path="analytics/:id" element={<DetailedAnalytics />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
