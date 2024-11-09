@@ -2,8 +2,16 @@ import React from "react";
 import TopSection from "../components/TopSection";
 import { SlCalender } from "react-icons/sl";
 import { GoClock } from "react-icons/go";
+import { useSelector } from "react-redux";
+import NotFound from "./NotFound";
 
 export default function Report() {
+  const user = useSelector((state) => state.auth.user);
+
+  if (user.role !== "teacher") {
+    return <NotFound />;
+  }
+
   const subject = "Software Engineering & Agile Programming";
   const branch = "CST";
   const section = "2C";
