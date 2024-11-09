@@ -42,7 +42,7 @@ export default function DetailedAnalytics() {
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col pl-80 items-center p-6">
-      <TopSection title="report" />
+      <TopSection title="Analysis" />
 
       <div className='w-full bg-[#F0F7FF] rounded-xl shadow-md pl-10 pr-10 pb-10 pt-4'>
         <div className="flex text-3xl font-semibold justify-center items-center rounded-lg">
