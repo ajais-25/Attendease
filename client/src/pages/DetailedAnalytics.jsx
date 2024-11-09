@@ -58,12 +58,12 @@ export default function DetailedAnalytics() {
             <span className='col-span-3 text-start'>Date</span>
             <span className='col-span-3 text-start'>Status</span>
           </div>
-          <div className='overflow-y-scroll w-full h-[150px] '>
+          <div className='overflow-y-scroll h-[150px] '>
             {details.map((detail, index) => (
-              <div className="grid grid-cols-9 text-gray-400 px-5 py-2 text-lg mt-4">
-                <span key={index} className='col-span-3'>{months[detail.month-1]}</span>
-                <span className='col-span-3 text-start'>{detail.date}{((detail.date) % 10) <= 3 ? prefix[detail.date % 10] : "th"}</span>
-                <span className='col-span-3 text-start'>{detail.studentPresent?"Present":"Absent"}</span>
+              <div className="grid grid-cols-9 font-medium text-gray-400 px-5 py-2 text-lg mt-4">
+                <span key={index} className='col-span-3 '>{months[detail.month-1]}</span>
+                <span className='ml-2 col-span-3 text-start'>{detail.date}{((detail.date) % 10) <= 3 ? prefix[detail.date % 10] : "th"}</span>
+                <span className='ml-2 col-span-3 text-start'>{detail.studentPresent?"Present":"Absent"}</span>
               </div>
             ))}
           </div>
