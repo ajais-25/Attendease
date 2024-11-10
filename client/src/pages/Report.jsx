@@ -31,17 +31,17 @@ export default function Report() {
   ];
   const now = new Date();
   const students = [
-    { id: "TIPSGRM1012223", name: "Swapnamoy Midya" },
-    { id: "TIPSGRM1012223", name: "Prithvi Sen" },
-    { id: "TIPSGRM1012223", name: "Akshat Jaiswal" },
-    { id: "TIPSGRM1012223", name: "Sarthak Kumar" },
-    { id: "TIPSGRM1012223", name: "Souvik Kundu" },
-    { id: "TIPSGRM1012223", name: "Swapnamoy Midya" },
-    { id: "TIPSGRM1012223", name: "Sarthak Kumar" },
-    { id: "TIPSGRM1012223", name: "Souvik Kundu" },
-    { id: "TIPSGRM1012223", name: "Sarthak Kumar" },
-    { id: "TIPSGRM1012223", name: "Souvik Kundu" },
-    { id: "TIPSGRM1012223", name: "Swapnamoy Midya" },
+    { id: "TIPSGRM1012223", name: "Swapnamoy Midya", batch:"CST", section:"2C" },
+    { id: "TIPSGRM1012223", name: "Prithvi Sen" ,batch:"CST", section:"2C" },
+    { id: "TIPSGRM1012223", name: "Akshat Jaiswal",batch:"CST", section:"2C" },
+    { id: "TIPSGRM1012223", name: "Sarthak Kumar" ,batch:"CST", section:"2C" },
+    { id: "TIPSGRM1012223", name: "Souvik Kundu" ,batch:"CST", section:"2C"},
+    { id: "TIPSGRM1012223", name: "Swapnamoy Midya" ,batch:"CST", section:"2C"},
+    { id: "TIPSGRM1012223", name: "Sarthak Kumar" ,batch:"CST", section:"2C"},
+    { id: "TIPSGRM1012223", name: "Souvik Kundu" ,batch:"CST", section:"2C" },
+    { id: "TIPSGRM1012223", name: "Sarthak Kumar" ,batch:"CST", section:"2C"},
+    { id: "TIPSGRM1012223", name: "Souvik Kundu" ,batch:"CST", section:"2C"},
+    { id: "TIPSGRM1012223", name: "Swapnamoy Midya" ,batch:"CST", section:"2C"},
   ];
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col pl-80 items-center p-6">

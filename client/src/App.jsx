@@ -17,6 +17,7 @@ import store, { persistor } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import Report from "./pages/Report";
 import DetailedAnalytics from "./pages/DetailedAnalytics";
+import StudentList from "./pages/StudentList";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
         <Route path="classes/:id" element={<Report />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="analytics/:id" element={<DetailedAnalytics />} />
+        <Route path="studentlist" element={<StudentList/>} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
