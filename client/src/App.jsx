@@ -11,6 +11,7 @@ import Classes from "./pages/Classes";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
 import { Provider } from "react-redux";
 import store, { persistor } from "./store/store";
@@ -32,6 +33,8 @@ const router = createBrowserRouter(
         <Route path="analytics" element={<Analytics />} />
         <Route path="analytics/:id" element={<DetailedAnalytics />} />
         <Route path="studentlist" element={<StudentList/>} />
+        <Route path="dashboard" element={<Dashboard />} />
+        
       </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
