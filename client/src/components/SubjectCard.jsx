@@ -1,6 +1,8 @@
 import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const SubjectCard = ({ subject }) => {
   const getColor = (score) => {
@@ -9,13 +11,24 @@ const SubjectCard = ({ subject }) => {
     return "#F44336"; // Red for scores < 50%
   };
 
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+
   const attendancePercentage =
     Math.round((subject.totalPresent / subject.totalClasses) * 1000) / 10;
+
+  const handleClick = () => {
+    if (user.role === "student") navigate(`/analytics/${subject._id}`);
+    else return;
+  };
 
   return (
     <div
       key={subject.name}
-      className="flex items-center justify-between p-4 bg-[#F0F7FF] shadow-lg rounded-lg mb-4"
+      className={`${
+        user.role === "student" ? "cursor-pointer" : ""
+      } flex items-center justify-between p-4 bg-[#F0F7FF] shadow-lg rounded-lg mb-4`}
+      onClick={handleClick}
     >
       <div>
         <h3 className="font-semibold text-gray-700">{subject.subject}</h3>
