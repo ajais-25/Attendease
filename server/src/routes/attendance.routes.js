@@ -8,6 +8,7 @@ import {
     getStudentAllAttendanceIncomplete,
     markStudentPresent,
     getEachSubjectAttendanceAnalytics,
+    getIndividualAttendanceAnalytics,
 } from "../controllers/attendance.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { Router } from "express";
@@ -27,5 +28,6 @@ router.route("/t/:attendanceId/active").put(changeActiveStatus);
 router.route("/s/student").get(getStudentAllAttendanceIncomplete);
 router.route("/s/:attendanceId/mark").put(markStudentPresent);
 router.route("/s/analytics").get(getEachSubjectAttendanceAnalytics);
+router.route("/s/analytics/:subjectId").get(getIndividualAttendanceAnalytics);
 
 export default router;

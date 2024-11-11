@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import TopSection from "../components/TopSection";
 import SubjectCard from "../components/SubjectCard";
 import { useSelector } from "react-redux";
+import NotFound from "./NotFound";
+import axios from "axios";
+import { API } from "../api";
+import { useParams } from "react-router-dom";
+import DayWiseAnalysis from "../components/DayWiseAnalysis";
 
 export default function DetailedAnalytics() {
+  const { id } = useParams();
+  const [analytics, setAnalytics] = useState([]);
+  const [details, setDetails] = useState([]);
+
+  useLayoutEffect(() => {
+    const getAnalytics = async () => {
+      try {
+        const response = await axios.get(`${API}/attendance/s/analytics/${id}`);
+        setAnalytics(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getAnalytics();
+  }, [id]);
+
   const user = useSelector((state) => state.auth.user);
 
   if (user.role !== "student") {
@@ -11,34 +33,10 @@ export default function DetailedAnalytics() {
   }
 
   const subject = {
-    totalClasses: 5,
-    totalPresent: 3,
-    subject: "DBMS",
+    totalClasses: analytics ? analytics.totalClasses : 0,
+    totalPresent: analytics ? analytics.totalPresent : 0,
+    subject: analytics ? analytics.subject : "",
   };
-
-  const details = [
-    { month: 9, date: 2, year: 2024, studentPresent: true },
-    { month: 9, date: 3, year: 2024, studentPresent: false },
-    { month: 9, date: 4, year: 2024, studentPresent: true },
-    { month: 9, date: 4, year: 2024, studentPresent: true },
-  ];
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const prefix = ["th", "st", "nd", "rd"];
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col pl-80 items-center p-6">
@@ -59,20 +57,10 @@ export default function DetailedAnalytics() {
             <span className="col-span-3 text-start">Status</span>
           </div>
           <div className="overflow-y-scroll h-[150px] ">
-            {details.map((detail, index) => (
-              <div className="grid grid-cols-9 font-medium text-gray-400 px-5 py-2 text-lg mt-4">
-                <span key={index} className="col-span-3 ">
-                  {months[detail.month - 1]}
-                </span>
-                <span className="ml-2 col-span-3 text-start">
-                  {detail.date}
-                  {detail.date % 10 <= 3 ? prefix[detail.date % 10] : "th"}
-                </span>
-                <span className="ml-2 col-span-3 text-start">
-                  {detail.studentPresent ? "Present" : "Absent"}
-                </span>
-              </div>
-            ))}
+            {analytics.attendanceAnalytics &&
+              analytics.attendanceAnalytics.map((analytic) => (
+                <DayWiseAnalysis key={analytic.id} analytic={analytic} />
+              ))}
           </div>
         </div>
       </div>

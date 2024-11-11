@@ -547,6 +547,45 @@ const getEachSubjectAttendanceAnalytics = asyncHandler(async (req, res) => {
         );
 });
 
+const getIndividualAttendanceAnalytics = asyncHandler(async (req, res) => {
+    if (!isStudent(req.user)) {
+        return res.status(403).json({ message: "Unauthorized request" });
+    }
+
+    const { subjectId } = req.params;
+
+    const attendanceAnalytics = await Attendance.find({
+        section: new mongoose.Types.ObjectId(req.user.section),
+        subject: new mongoose.Types.ObjectId(subjectId),
+    })
+        .populate("subject")
+        .sort({ date: -1, time: -1 });
+
+    if (!attendanceAnalytics) {
+        return res.status(404).json({ message: "Attendance not found" });
+    }
+
+    // console.log(attendanceAnalytics);
+
+    const totalClasses = attendanceAnalytics.length;
+    const totalPresent = attendanceAnalytics.filter((attendance) =>
+        attendance.studentsPresent.includes(req.user._id)
+    ).length;
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                attendanceAnalytics,
+                totalClasses,
+                totalPresent,
+                subject: attendanceAnalytics[0].subject.name,
+            },
+            "Attendance analytics fetched successfully"
+        )
+    );
+});
+
 export {
     createAttendance,
     getTeacherAllAttendanceComplete,
@@ -557,4 +596,5 @@ export {
     getStudentAllAttendanceIncomplete,
     markStudentPresent,
     getEachSubjectAttendanceAnalytics,
+    getIndividualAttendanceAnalytics,
 };
