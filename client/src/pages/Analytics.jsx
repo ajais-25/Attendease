@@ -35,7 +35,11 @@ const Analytics = () => {
       {loading && <Loading />}
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {subjects.map((subject) => (
-          <SubjectCard key={subject._id} subject={subject} />
+          <SubjectCard
+            key={subject._id}
+            subject={subject}
+            shouldNavigate={true}
+          />
         ))}
       </div>
     </div>

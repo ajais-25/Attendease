@@ -48,7 +48,7 @@ export default function DetailedAnalytics() {
         </div>
         <div className="h-[420px] mt-6 rounded-xl shadow-md bg-white">
           <div className="p-4 w-96">
-            <SubjectCard subject={subject} />
+            <SubjectCard subject={subject} shouldNavigate={false} />
           </div>
           <p className="text-xl font-semibold pl-5">Your History</p>
           <div className="grid grid-cols-9 px-5 py-2 text-lg font-medium mt-4 border-y-2  ">

@@ -4,7 +4,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const SubjectCard = ({ subject }) => {
+const SubjectCard = ({ subject, shouldNavigate }) => {
   const getColor = (score) => {
     if (score >= 75) return "#4CAF50"; // Green for scores >= 75%
     if (score >= 50) return "#FFC107"; // Yellow for scores between 50% and 74%
@@ -17,8 +17,10 @@ const SubjectCard = ({ subject }) => {
   const attendancePercentage =
     Math.round((subject.totalPresent / subject.totalClasses) * 1000) / 10;
 
+  const id = subject._id;
+
   const handleClick = () => {
-    if (user.role === "student") navigate(`/analytics/${subject._id}`);
+    if (user.role === "student" && shouldNavigate) navigate(`/analytics/${id}`);
     else return;
   };
 
