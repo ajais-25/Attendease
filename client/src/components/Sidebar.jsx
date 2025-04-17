@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { API } from "../api";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 import {
@@ -13,6 +15,7 @@ import {
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -20,7 +23,8 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${API}/user/logout`, { withCredentials: true });
+      await axios.post(`${API}/users/logout`);
+      navigate("/login");
     } catch (error) {
       console.log("Error logging out: ", error);
       console.error(error);

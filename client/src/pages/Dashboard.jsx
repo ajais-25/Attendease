@@ -53,7 +53,7 @@ export default function Dashboard() {
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <div className="flex items-center space-x-2">
             <div className="flex flex-col items-end">
-              <h3 className="font-medium">Swapnamoy Midya</h3>
+              <h3 className="font-medium">Student A</h3>
               <p className="text-sm text-muted-foreground">Student</p>
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function Dashboard() {
           <div className="flex flex-col items-center space-y-4">
             <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
             <div className="text-center">
-              <h3 className="font-medium">Swapnamoy Midya</h3>
+              <h3 className="font-medium">Student A</h3>
               <p className="text-sm text-gray-500">Student</p>
             </div>
             <button
